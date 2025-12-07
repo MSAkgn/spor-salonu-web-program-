@@ -12,52 +12,8 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
-}
-/* Sticky Footer Ayarları (Sayfa kısa olsa bile footer en altta durur) */
-html, body {
-  height: 100%;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-}
-
-main {
-  flex: 1; /* İçerik alanı boşluğu doldurarak footer'ı aşağı iter */
-}
-
-/* --- KESİN STICKY FOOTER ÇÖZÜMÜ --- */
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  /* Sayfanın en az ekran boyu kadar olmasını zorla */
-  min-height: 100vh; 
-  /* İçerikleri dikey diz */
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-}
-
-/* Footer'ı en alta itmek için Footer'ın kendisine değil, 
-   onun üstündeki kapsayıcıya büyüme emri veriyoruz */
-body > .container {
-  flex: 1 0 auto;
-}
-
-.footer {
-  /* Footer'ın yüksekliği içeriği kadar olsun */
-  flex-shrink: 0; 
-  width: 100%;
-}
+/* NOT: Footer yerleşimi için HTML tarafında (Layout dosyasında) 
+   Bootstrap sınıfları (d-flex, flex-column, min-vh-100) kullanıldığı için,
+   burada ekstra bir "body margin" veya "position absolute" koduna gerek yoktur.
+   O kodlar silinmiştir.
+*/

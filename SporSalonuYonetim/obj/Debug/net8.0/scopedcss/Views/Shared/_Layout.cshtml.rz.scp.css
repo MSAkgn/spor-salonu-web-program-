@@ -39,10 +39,4 @@ button.accept-policy[b-i6cuaxw6a6] {
   line-height: inherit;
 }
 
-.footer[b-i6cuaxw6a6] {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
-}
+/* .footer BLOĞU SİLİNDİ - Footer ayarları artık _Layout.cshtml içinde Bootstrap sınıfları (fixed-bottom) ile yapılıyor. */

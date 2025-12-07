@@ -25,6 +25,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddDefaultTokenProviders();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages(); // <-- BU SATIRI EKLEYİN
 
 var app = builder.Build();
 
@@ -47,4 +48,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapRazorPages(); // <-- BU SATIRI EKLEYİN
+// --- YENİ EKLENECEK KISIM BAŞLANGIÇ ---
+using (var scope = app.Services.CreateScope())
+{
+    await DbSeeder.SeedRolesAndAdminAsync(scope.ServiceProvider);
+}
+// --- BİTİŞ ---
 app.Run();
