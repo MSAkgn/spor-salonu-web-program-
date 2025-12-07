@@ -1,0 +1,46 @@
+@model IEnumerable<SporSalonuYonetim.Models.Trainer>
+
+@{
+    ViewData["Title"] = "Antrenörlerimiz";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>🏋️ Antrenörlerimiz</h1>
+        <a asp-action="Create" class="btn btn-primary btn-lg">+ Yeni Antrenör Ekle</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            Henüz sisteme kayıtlı bir antrenör bulunmamaktadır.
+        </div>
+    }
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100 border-0">
+                    <div class="card-header bg-dark text-white text-center py-3">
+                        <h5 class="card-title mb-0">@item.AdSoyad</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <img src="https://cdn-icons-png.flaticon.com/512/8847/8847419.png" alt="Trainer" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
+                        
+                        <h6 class="text-primary fw-bold">@item.UzmanlikAlani</h6>
+                        <hr />
+                        <p class="card-text text-muted">
+                            <small>🕒 @item.CalismaBaslangicSaati - @item.CalismaBitisSaati</small>
+                        </p>
+                    </div>
+                    <div class="card-footer bg-white border-top-0 d-flex justify-content-between">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm">Düzenle</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm">Detay</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">Sil</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
