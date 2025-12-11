@@ -1,0 +1,103 @@
+@{
+    ViewData["Title"] = "Yönetim Raporları";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">📊 Günlük Raporlar (REST API)</h2>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    Antrenör Listesi
+                </div>
+                <div class="card-body">
+                    <ul id="trainerList" class="list-group list-group-flush">
+                        <li class="list-group-item text-muted">Yükleniyor...</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <span>Günlük Randevular</span>
+                    <input type="date" id="dateFilter" class="form-control form-control-sm w-auto" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Saat</th>
+                                <th>Antrenör</th>
+                                <th>Üye</th>
+                                <th>Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointmentTable">
+                            <tr><td colspan="4" class="text-center">Veri bekleniyor...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Sayfa yüklendiğinde çalış
+        document.addEventListener("DOMContentLoaded", () => {
+            loadTrainers();
+            loadAppointments(); // Bugünün verisini çek
+
+            // Tarih değişince tekrar çek
+            document.getElementById("dateFilter").addEventListener("change", (e) => {
+                loadAppointments(e.target.value);
+            });
+        });
+
+        // 1. Antrenörleri API'den Çek (Fetch)
+        function loadTrainers() {
+            fetch('/api/reportsapi/trainers')
+                .then(response => response.json())
+                .then(data => {
+                    let html = "";
+                    data.forEach(t => {
+                        html += `<li class="list-group-item d-flex justify-content-between align-items-center">
+                                    ${t.adSoyad}
+                                    <span class="badge bg-secondary rounded-pill">${t.uzmanlikAlani}</span>
+                                 </li>`;
+                    });
+                    document.getElementById("trainerList").innerHTML = html;
+                });
+        }
+
+        // 2. Randevuları API'den Çek
+        function loadAppointments(date) {
+            let url = '/api/reportsapi/appointments';
+            if (date) url += `?date=${date}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    let html = "";
+                    if(data.length === 0) {
+                        html = `<tr><td colspan="4" class="text-center text-muted">Bu tarihte randevu yok.</td></tr>`;
+                    } else {
+                        data.forEach(a => {
+                            let badgeClass = a.durum === "Onaylı" ? "success" : "warning";
+                            html += `<tr>
+                                        <td>${a.tarih}</td>
+                                        <td>${a.antrenor}</td>
+                                        <td>${a.uye}</td>
+                                        <td><span class="badge bg-${badgeClass}">${a.durum}</span></td>
+                                     </tr>`;
+                        });
+                    }
+                    document.getElementById("appointmentTable").innerHTML = html;
+                });
+        }
+    </script>
+}

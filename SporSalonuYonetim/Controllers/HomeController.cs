@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SporSalonuYonetim.Models;
@@ -27,5 +28,10 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+    [Authorize(Roles = "Admin")]
+    public IActionResult Reports()
+    {
+        return View();
     }
 }

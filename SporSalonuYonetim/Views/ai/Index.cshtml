@@ -1,0 +1,55 @@
+@model SporSalonuYonetim.Models.AiViewModel
+
+@{
+    ViewData["Title"] = "Yapay Zeka Analizi";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="mb-0">🧠 AI Vücut Analizi</h3>
+                    <small>Yapay zeka senin için en iyi programı önersin.</small>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Index" method="post">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Boyunuz (cm)</label>
+                            <input asp-for="Boy" class="form-control form-control-lg" placeholder="Örn: 180" type="number" required />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Kilonuz (kg)</label>
+                            <input asp-for="Kilo" class="form-control form-control-lg" placeholder="Örn: 75" type="number" required />
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold">🚀 Analiz Et</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.BmiSonuc != null)
+        {
+            <div class="col-md-6 mt-4 mt-md-0">
+                <div class="card shadow border-@Model.Renk h-100">
+                    <div class="card-body text-center">
+                        <h4 class="text-muted">Vücut Kitle İndeksiniz</h4>
+                        <h1 class="display-3 fw-bold text-@Model.Renk">@Model.BmiSonuc</h1>
+                        <span class="badge bg-@Model.Renk fs-5 px-4 py-2 mb-4">@Model.Durum</span>
+                        
+                        <div class="alert alert-secondary text-start mt-3 border-0 bg-light">
+                            <h5 class="alert-heading fw-bold mb-2">💡 Tavsiyemiz:</h5>
+                            <p class="mb-0" style="font-size: 1.1rem; line-height: 1.6;">
+                                @Model.Oneri
+                            </p>
+                        </div>
+                        
+                        <a asp-controller="Services" asp-action="Index" class="btn btn-outline-dark mt-3">Programları İncele</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
