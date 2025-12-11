@@ -1,42 +1,36 @@
 @model SporSalonuYonetim.Models.Service
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Hizmet Detayı";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h3>Hizmet Detayları</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3 fw-bold">Hizmet Adı</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Ad)</dd>
 
-<div>
-    <h4>Service</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ad)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Aciklama)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Aciklama)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SureDakika)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SureDakika)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ucret)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ucret)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+                <dt class="col-sm-3 fw-bold">Açıklama</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Aciklama)</dd>
+
+                <dt class="col-sm-3 fw-bold">Süre</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.SureDakika) Dakika</dd>
+
+                <dt class="col-sm-3 fw-bold">Ücret</dt>
+                <dd class="col-sm-9 text-success fw-bold">₺@Html.DisplayFor(model => model.Ucret)</dd>
+            </dl>
+        </div>
+        <div class="card-footer bg-white">
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Düzenle</a>
+            }
+            
+            <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+        </div>
+    </div>
 </div>

@@ -7,20 +7,18 @@ namespace SporSalonuYonetim.Data
     {
         public static async Task SeedRolesAndAdminAsync(IServiceProvider service)
         {
-            // Kullanıcı ve Rol yöneticilerini çağır
             var userManager = service.GetService<UserManager<ApplicationUser>>();
             var roleManager = service.GetService<RoleManager<IdentityRole>>();
 
-            // 1. Rolleri Kontrol Et ve Yoksa Oluştur
+            // 1. Rolleri Kontrol Et
             if (!await roleManager.RoleExistsAsync("Admin"))
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
 
             if (!await roleManager.RoleExistsAsync("Member"))
                 await roleManager.CreateAsync(new IdentityRole("Member"));
 
-            // 2. Admin Kullanıcısını Oluştur
-            // BURAYI KENDİ NUMARANIZLA GÜNCELLEYİN 👇
-            var adminEmail = "b231210032@sakarya.edu.tr"; 
+            // 2. Admin Kullanıcısını Yönet
+            var adminEmail = "g211210001@sakarya.edu.tr"; // Numaran buradaydı
             
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
@@ -34,14 +32,19 @@ namespace SporSalonuYonetim.Data
                     EmailConfirmed = true
                 };
 
-                // Şifre: sau (Ödevde istenen şifre)
                 var result = await userManager.CreateAsync(newAdmin, "sau");
                 
                 if (result.Succeeded)
                 {
-                    // Kullanıcıya Admin rolünü ver
                     await userManager.AddToRoleAsync(newAdmin, "Admin");
                 }
+            }
+            else 
+            {
+                // --- YENİ EKLENEN KISIM ---
+                // Eğer Admin zaten varsa, Güvenlik Mührünü değiştir.
+                // Bu işlem, eski oturumların (Cookie'lerin) anında geçersiz olmasını sağlar.
+                await userManager.UpdateSecurityStampAsync(adminUser);
             }
         }
     }

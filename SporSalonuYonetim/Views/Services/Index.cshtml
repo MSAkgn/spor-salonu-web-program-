@@ -7,7 +7,11 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>🧘 Hizmetlerimiz</h1>
-        <a asp-action="Create" class="btn btn-success btn-lg">+ Yeni Hizmet Ekle</a>
+        
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-success btn-lg">+ Yeni Hizmet Ekle</a>
+        }
     </div>
 
     <div class="card shadow">
@@ -35,10 +39,17 @@
                                 ₺@item.Ucret
                             </td>
                             <td class="text-center align-middle">
-                                <div class="btn-group" role="group">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Sil</a>
-                                </div>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">Yetki Yok</span>
+                                }
                             </td>
                         </tr>
                     }
@@ -49,7 +60,6 @@
             {
                 <div class="text-center py-5 text-muted">
                     <h4>Henüz bir hizmet eklenmemiş.</h4>
-                    <p>Yukarıdaki butonu kullanarak ilk hizmeti ekleyin.</p>
                 </div>
             }
         </div>

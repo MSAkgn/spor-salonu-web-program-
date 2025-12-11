@@ -1,42 +1,35 @@
 @model SporSalonuYonetim.Models.Trainer
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Antrenör Detayı";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h3>Antrenör Bilgileri</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3 fw-bold">Ad Soyad</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.AdSoyad)</dd>
 
-<div>
-    <h4>Trainer</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AdSoyad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AdSoyad)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UzmanlikAlani)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UzmanlikAlani)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CalismaBaslangicSaati)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CalismaBaslangicSaati)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CalismaBitisSaati)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CalismaBitisSaati)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+                <dt class="col-sm-3 fw-bold">Uzmanlık Alanı</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.UzmanlikAlani)</dd>
+
+                <dt class="col-sm-3 fw-bold">Çalışma Saatleri</dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.CalismaBaslangicSaati) - @Html.DisplayFor(model => model.CalismaBitisSaati)
+                </dd>
+            </dl>
+        </div>
+        <div class="card-footer bg-white">
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Düzenle</a>
+            }
+            
+            <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+        </div>
+    </div>
 </div>

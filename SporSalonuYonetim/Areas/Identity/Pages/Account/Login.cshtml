@@ -8,6 +8,13 @@
     <div class="col-md-4">
         <h2 class="text-center mt-4">🔑 Giriş Yap</h2>
         <hr />
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger text-center fw-bold" role="alert">
+                ⚠️ @TempData["ErrorMessage"]
+            </div>
+        }
         <form id="account" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             

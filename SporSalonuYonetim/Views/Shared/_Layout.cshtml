@@ -15,12 +15,10 @@
                 <a class="navbar-brand fw-bold text-uppercase text-warning" asp-area="" asp-controller="Home" asp-action="Index">
                     💪 GYM PRO
                 </a>
-                
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
@@ -31,6 +29,10 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Services" asp-action="Index">Hizmetler</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Appointments" asp-action="Index">Randevularım</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" asp-area="" asp-controller="Home" asp-action="Privacy">Gizlilik</a>
@@ -43,50 +45,36 @@
         </nav>
     </header>
 
-    <div class="container flex-grow-1"> 
+    <div class="container flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-white bg-dark pt-5 pb-3">
+    <footer class="border-top footer text-white bg-dark pt-5 pb-3 mt-auto">
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <h5 class="text-warning text-uppercase fw-bold">GYM PRO</h5>
-                    <p class="small text-white-50">
-                        Şehrin en modern ekipmanları ve uzman kadrosuyla hedeflerine ulaşman için buradayız. Sınırlarını zorla, değişimi hisset.
-                    </p>
+                    <h5 class="text-warning fw-bold">GYM PRO</h5>
+                    <p class="small text-white-50">Sınırlarını zorla, değişimi hisset.</p>
                 </div>
-
                 <div class="col-md-4 mb-4">
-                    <h5 class="text-white text-uppercase fw-bold">Hızlı Erişim</h5>
-                    <ul class="list-unstyled">
+                    <h5 class="text-white fw-bold">Hızlı Erişim</h5>
+                    <ul class="list-unstyled small">
                         <li><a asp-controller="Home" asp-action="Index" class="text-white-50 text-decoration-none">Ana Sayfa</a></li>
-                        <li><a asp-controller="Trainers" asp-action="Index" class="text-white-50 text-decoration-none">Eğitmen Kadrosu</a></li>
-                        <li><a asp-controller="Services" asp-action="Index" class="text-white-50 text-decoration-none">Hizmetler & Fiyatlar</a></li>
-                        <li><a asp-controller="Home" asp-action="Privacy" class="text-white-50 text-decoration-none">Gizlilik Politikası</a></li>
+                        <li><a asp-controller="Trainers" asp-action="Index" class="text-white-50 text-decoration-none">Eğitmenler</a></li>
+                        <li><a asp-controller="Services" asp-action="Index" class="text-white-50 text-decoration-none">Hizmetler</a></li>
                     </ul>
                 </div>
-
                 <div class="col-md-4 mb-4">
-                    <h5 class="text-white text-uppercase fw-bold">İletişim</h5>
-                    <ul class="list-unstyled small text-white-50">
-                        <li class="mb-2">📍 Sakarya Üniversitesi Kampüsü, Serdivan</li>
-                        <li class="mb-2">📞 (0264) 123 45 67</li>
-                        <li class="mb-2">✉️ info@gympro.com</li>
-                    </ul>
-                    <div class="d-flex gap-3 mt-3">
-                        <a href="#" class="text-warning fs-5 text-decoration-none">Instagram</a>
-                        <a href="#" class="text-warning fs-5 text-decoration-none">Twitter</a>
-                    </div>
+                    <h5 class="text-white fw-bold">İletişim</h5>
+                    <p class="small text-white-50 mb-1">Sakarya Üniversitesi, Serdivan</p>
+                    <p class="small text-white-50">info@gympro.com</p>
                 </div>
             </div>
-            
             <hr class="border-secondary" />
-            
             <div class="text-center small text-white-50">
-                &copy; 2025 - SporSalonuYonetim - Tüm Hakları Saklıdır.
+                &copy; 2025 - GYM PRO - Tüm Hakları Saklıdır.
             </div>
         </div>
     </footer>

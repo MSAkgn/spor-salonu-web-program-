@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SporSalonuYonetim.Data;
 using SporSalonuYonetim.Models;
+using Microsoft.AspNetCore.Authorization; // Yetkilendirme kütüphanesi eklendi
 
 namespace SporSalonuYonetim.Controllers
 {
@@ -19,13 +20,13 @@ namespace SporSalonuYonetim.Controllers
             _context = context;
         }
 
-        // GET: Trainers
+        // GET: Trainers (Listeyi herkes görebilir)
         public async Task<IActionResult> Index()
         {
             return View(await _context.Trainers.ToListAsync());
         }
 
-        // GET: Trainers/Details/5
+        // GET: Trainers/Details/5 (Detayı herkes görebilir)
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,17 +44,17 @@ namespace SporSalonuYonetim.Controllers
             return View(trainer);
         }
 
-        // GET: Trainers/Create
+        // GET: Trainers/Create (SADECE ADMIN)
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Trainers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Trainers/Create (SADECE ADMIN)
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,AdSoyad,UzmanlikAlani,CalismaBaslangicSaati,CalismaBitisSaati")] Trainer trainer)
         {
             if (ModelState.IsValid)
@@ -65,7 +66,8 @@ namespace SporSalonuYonetim.Controllers
             return View(trainer);
         }
 
-        // GET: Trainers/Edit/5
+        // GET: Trainers/Edit/5 (SADECE ADMIN)
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,11 +83,10 @@ namespace SporSalonuYonetim.Controllers
             return View(trainer);
         }
 
-        // POST: Trainers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Trainers/Edit/5 (SADECE ADMIN)
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,AdSoyad,UzmanlikAlani,CalismaBaslangicSaati,CalismaBitisSaati")] Trainer trainer)
         {
             if (id != trainer.Id)
@@ -116,7 +117,8 @@ namespace SporSalonuYonetim.Controllers
             return View(trainer);
         }
 
-        // GET: Trainers/Delete/5
+        // GET: Trainers/Delete/5 (SADECE ADMIN)
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,9 +136,10 @@ namespace SporSalonuYonetim.Controllers
             return View(trainer);
         }
 
-        // POST: Trainers/Delete/5
+        // POST: Trainers/Delete/5 (SADECE ADMIN)
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var trainer = await _context.Trainers.FindAsync(id);
