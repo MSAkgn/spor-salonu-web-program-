@@ -1,55 +1,100 @@
 @model SporSalonuYonetim.Models.AiViewModel
 
 @{
-    ViewData["Title"] = "Yapay Zeka Analizi";
+    ViewData["Title"] = "AI Antrenör Analizi";
 }
 
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <div class="row justify-content-center">
-        <div class="col-md-5">
+        
+        <div class="col-md-5 mb-4">
             <div class="card shadow-lg border-0">
-                <div class="card-header bg-primary text-white text-center py-4">
-                    <h3 class="mb-0">🧠 AI Vücut Analizi</h3>
-                    <small>Yapay zeka senin için en iyi programı önersin.</small>
+                <div class="card-header bg-gradient bg-primary text-white text-center py-4">
+                    <h3 class="mb-0"><i class="fas fa-robot"></i> AI Antrenör</h3>
+                    <small>İster Boy/Kilo Gir, İster Fotoğraf Yükle</small>
                 </div>
                 <div class="card-body p-4">
-                    <form asp-action="Index" method="post">
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Boyunuz (cm)</label>
-                            <input asp-for="Boy" class="form-control form-control-lg" placeholder="Örn: 180" type="number" required />
+                    <div id="loadingSpinner" class="text-center d-none py-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <h5 class="mt-3 text-muted">Analiz Yapılıyor...</h5>
+                    </div>
+
+                    <form id="aiForm" asp-action="Index" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                        
+                        <div class="alert alert-secondary border-0 shadow-sm small">
+                            <i class="fas fa-lightbulb text-warning"></i> 
+                            İsterseniz sadece boy/kilo girin, isterseniz sadece fotoğraf yükleyin. En iyi sonuç için ikisini de kullanabilirsiniz.
                         </div>
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Kilonuz (kg)</label>
-                            <input asp-for="Kilo" class="form-control form-control-lg" placeholder="Örn: 75" type="number" required />
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label fw-bold">Boy (cm)</label>
+                                <input asp-for="Boy" class="form-control" placeholder="Örn: 180" type="number" />
+                            </div>
+                            <div class="col">
+                                <label class="form-label fw-bold">Kilo (kg)</label>
+                                <input asp-for="Kilo" class="form-control" placeholder="Örn: 75" type="number" />
+                            </div>
                         </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Vücut Fotoğrafı (İsteğe Bağlı)</label>
+                            <input asp-for="Foto" type="file" class="form-control" accept="image/*" />
+                        </div>
+
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg fw-bold">🚀 Analiz Et</button>
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm">
+                                🚀 Analizi Başlat
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        @if (Model.BmiSonuc != null)
+        @if (Model.Oneri != null)
         {
-            <div class="col-md-6 mt-4 mt-md-0">
-                <div class="card shadow border-@Model.Renk h-100">
-                    <div class="card-body text-center">
-                        <h4 class="text-muted">Vücut Kitle İndeksiniz</h4>
-                        <h1 class="display-3 fw-bold text-@Model.Renk">@Model.BmiSonuc</h1>
-                        <span class="badge bg-@Model.Renk fs-5 px-4 py-2 mb-4">@Model.Durum</span>
-                        
-                        <div class="alert alert-secondary text-start mt-3 border-0 bg-light">
-                            <h5 class="alert-heading fw-bold mb-2">💡 Tavsiyemiz:</h5>
-                            <p class="mb-0" style="font-size: 1.1rem; line-height: 1.6;">
-                                @Model.Oneri
-                            </p>
+            <div class="col-md-7">
+                <div class="card shadow border-0 h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Analiz Sonucu</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (!string.IsNullOrEmpty(Model.FotoDataUrl))
+                        {
+                            <div class="text-center mb-3">
+                                <img src="@Model.FotoDataUrl" class="img-fluid rounded shadow-sm" style="max-height: 200px;" />
+                            </div>
+                        }
+
+                        <div class="p-3 bg-light rounded border">
+                            @Html.Raw(Model.Oneri)
                         </div>
                         
-                        <a asp-controller="Services" asp-action="Index" class="btn btn-outline-dark mt-3">Programları İncele</a>
+                        <div class="mt-3 text-end">
+                            <a href="/Ai" class="btn btn-outline-secondary btn-sm">Yeni Analiz</a>
+                        </div>
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
+
+<script>
+    // Form gönderilmeden önce en az birinin dolu olduğunu kontrol et
+    function validateForm() {
+        var boy = document.querySelector('input[name="Boy"]').value;
+        var kilo = document.querySelector('input[name="Kilo"]').value;
+        var foto = document.querySelector('input[name="Foto"]').files.length;
+
+        if ((boy == "" || kilo == "") && foto == 0) {
+            alert("Lütfen ya Boy/Kilo girin ya da bir Fotoğraf yükleyin!");
+            return false;
+        }
+
+        document.getElementById("aiForm").classList.add("d-none");
+        document.getElementById("loadingSpinner").classList.remove("d-none");
+        return true;
+    }
+</script>

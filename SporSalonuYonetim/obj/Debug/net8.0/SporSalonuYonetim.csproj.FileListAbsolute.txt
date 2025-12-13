@@ -255,3 +255,9 @@ C:\Users\msakg\OneDrive\Masaüstü\WebProje\SporSalonuYonetim\obj\Debug\net8.0\r
 C:\Users\msakg\OneDrive\Masaüstü\WebProje\SporSalonuYonetim\obj\Debug\net8.0\SporSalonuYonetim.pdb
 C:\Users\msakg\OneDrive\Masaüstü\WebProje\SporSalonuYonetim\obj\Debug\net8.0\SporSalonuYonetim.genruntimeconfig.cache
 C:\Users\msakg\OneDrive\Masaüstü\WebProje\SporSalonuYonetim\obj\Debug\net8.0\ref\SporSalonuYonetim.dll
+C:\Users\msakg\OneDrive\Masaüstü\WebProje\SporSalonuYonetim\bin\Debug\net8.0\Google.Apis.dll
+C:\Users\msakg\OneDrive\Masaüstü\WebProje\SporSalonuYonetim\bin\Debug\net8.0\Google.Apis.Auth.dll
+C:\Users\msakg\OneDrive\Masaüstü\WebProje\SporSalonuYonetim\bin\Debug\net8.0\Google.Apis.Core.dll
+C:\Users\msakg\OneDrive\Masaüstü\WebProje\SporSalonuYonetim\bin\Debug\net8.0\Google.GenAI.dll
+C:\Users\msakg\OneDrive\Masaüstü\WebProje\SporSalonuYonetim\bin\Debug\net8.0\System.Management.dll
+C:\Users\msakg\OneDrive\Masaüstü\WebProje\SporSalonuYonetim\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll
