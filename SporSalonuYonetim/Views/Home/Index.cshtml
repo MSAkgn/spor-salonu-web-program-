@@ -2,63 +2,65 @@
     ViewData["Title"] = "Ana Sayfa";
 }
 
-<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light" 
-     style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop'); background-size: cover; background-position: center; border-radius: 20px; min-height: 500px;">
-    
-    <div style="background-color: rgba(0,0,0,0.6); position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 20px;"></div>
-
-    <div class="col-md-8 p-lg-5 mx-auto my-5 position-relative text-white">
-        <h1 class="display-3 fw-bold">Sınırlarını Zorla</h1>
-        <p class="lead fw-normal mb-4">Profesyonel antrenörler ve yapay zeka destekli kişisel programlarla hedefine ulaş.</p>
-        <a class="btn btn-primary btn-lg px-4 gap-3" asp-controller="Services" asp-action="Index">Programları İncele</a>
-        <a class="btn btn-outline-light btn-lg px-4" asp-controller="Trainers" asp-action="Index">Ekibimizle Tanış</a>
+<div class="hero-section">
+    <div class="hero-content container">
+        <h1>Sınırlarını Zorla, <span style="color: #ff5722;">Potansiyelini Keşfet</span></h1>
+        <p>
+            Türkiye'nin ilk Yapay Zeka destekli spor salonu yönetim sistemi. 
+            Fotoğrafını yükle, AI koçun sana özel analizini yapsın.
+        </p>
+        
+        <a asp-controller="Ai" asp-action="Index" class="btn-gym">
+            🚀 YAPAY ZEKA İLE ANALİZ YAP
+        </a>
     </div>
 </div>
 
-<div class="container px-4 py-5" id="featured-3">
-    <h2 class="pb-2 border-bottom">Neden Biz?</h2>
-    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+<div class="container mb-5">
+    <div class="row g-4">
         
-        <div class="col feature-col">
-            <div class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3 p-3 d-inline-block">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-badge" viewBox="0 0 16 16">
-                    <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                    <path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492V2.5z"/>
-                </svg>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3 class="feature-title">AI Vücut Analizi</h3>
+                <p class="text-muted">Gemini AI teknolojisi ile boy, kilo ve fotoğraflarınızdan yağ oranı ve sağlık analizi çıkarın.</p>
             </div>
-            <h2>Uzman Eğitmenler</h2>
-            <p>Alanında sertifikalı, tecrübeli antrenörlerimizle birebir çalışma fırsatı yakala. Hedefine giden en kısa yolu onlar biliyor.</p>
-            <a asp-controller="Trainers" asp-action="Index" class="icon-link text-decoration-none">
-                Eğitmenleri Gör
-                <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
-            </a>
         </div>
 
-        <div class="col feature-col">
-            <div class="feature-icon bg-success bg-gradient text-white rounded-3 mb-3 p-3 d-inline-block">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cpu" viewBox="0 0 16 16">
-                    <path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5a.5.5 0 0 1 .5-.5zm2 5h-2v2h2V5zm0 4h-2v2h2V9zm4-4h-2v2h2V5zm0 4h-2v2h2V9z"/>
-                </svg>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon">📅</div>
+                <h3 class="feature-title">Akıllı Program</h3>
+                <p class="text-muted">Antrenman günlerinizi planlayın, size özel atanan dersleri kaçırmayın ve gelişiminizi izleyin.</p>
             </div>
-            <h2>Yapay Zeka Desteği</h2>
-            <p>Vücut analizine ve hedeflerine göre yapay zeka tarafından hazırlanan kişiye özel beslenme ve antrenman programları.</p>
-            <a href="#" class="icon-link text-decoration-none">
-                Yakında...
-            </a>
         </div>
 
-        <div class="col feature-col">
-            <div class="feature-icon bg-warning bg-gradient text-dark rounded-3 mb-3 p-3 d-inline-block">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-activity" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M6 2a.5.5 0 0 1 .47.345l.552 1.593 2.086-6.26a.5.5 0 0 1 .96.094l.303 3.1 1.794-5.382A.5.5 0 0 1 12.5 2h3.5a.5.5 0 0 1 0 1h-3.11l-1.383 4.15a.5.5 0 0 1-.948-.06L8.62 1.5 6.47 7.946a.5.5 0 0 1-.94.01L3.92 3.6 2.5 5h-2a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .49-.37l1.45-1.45 1.5-4.5z"/>
-                </svg>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3 class="feature-title">Gelişim Raporları</h3>
+                <p class="text-muted">Aylık gelişim grafiklerinizi inceleyin, BMI değişimlerinizi kontrol altında tutun.</p>
             </div>
-            <h2>Grup Dersleri</h2>
-            <p>Pilates, Yoga, Zumba ve daha fazlası. Salonumuzdaki çeşitli grup dersleri ile hem sosyalleş hem de formunu koru.</p>
-            <a asp-controller="Services" asp-action="Index" class="icon-link text-decoration-none">
-                Dersleri İncele
-                <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
-            </a>
+        </div>
+
+    </div>
+</div>
+
+<div class="container-fluid py-5" style="background-color: #333; color: white;">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <h2 style="color: #ff5722; font-weight: bold;">500+</h2>
+                <p>Mutlu Üye</p>
+            </div>
+            <div class="col-md-4">
+                <h2 style="color: #ff5722; font-weight: bold;">12</h2>
+                <p>Profesyonel Eğitmen</p>
+            </div>
+            <div class="col-md-4">
+                <h2 style="color: #ff5722; font-weight: bold;">%100</h2>
+                <p>Yapay Zeka Doğruluğu</p>
+            </div>
         </div>
     </div>
 </div>
