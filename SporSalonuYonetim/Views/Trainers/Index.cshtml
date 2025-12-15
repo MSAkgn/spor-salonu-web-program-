@@ -4,48 +4,143 @@
     ViewData["Title"] = "Antrenörlerimiz";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>🏋️ Antrenörlerimiz</h1>
+<style>
+    .trainer-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+    .trainer-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    .trainer-img-wrapper {
+        height: 350px;
+        overflow: hidden;
+        position: relative;
+    }
+    .trainer-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+        object-position: top center; /* Yüzler genelde yukarıda olur */
+    }
+    .trainer-card:hover .trainer-img {
+        transform: scale(1.1);
+    }
+    .social-btn {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 5px;
+        color: white;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    .social-btn:hover { opacity: 0.8; color: white; }
+</style>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h1 class="display-5 fw-bold">Eğitmenlerimiz</h1>
+            <p class="text-muted">Alanında uzman kadromuzla tanışın.</p>
+        </div>
         
         @if (User.IsInRole("Admin"))
         {
-            <a asp-action="Create" class="btn btn-primary btn-lg">+ Yeni Antrenör Ekle</a>
+            <a asp-action="Create" class="btn btn-dark btn-lg shadow">+ Yeni Eğitmen</a>
         }
     </div>
 
     @if (!Model.Any())
     {
-        <div class="alert alert-warning text-center" role="alert">
-            Henüz sisteme kayıtlı bir antrenör bulunmamaktadır.
+        <div class="alert alert-info text-center py-5">
+            <h4>Henüz kayıtlı eğitmen yok.</h4>
         </div>
     }
 
-    <div class="row">
+    <div class="row g-4">
         @foreach (var item in Model)
         {
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm h-100 border-0">
-                    <div class="card-header bg-dark text-white text-center py-3">
-                        <h5 class="card-title mb-0">@item.AdSoyad</h5>
-                    </div>
-                    <div class="card-body text-center">
-                        <img src="https://cdn-icons-png.flaticon.com/512/8847/8847419.png" alt="Trainer" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
+            // --- AKILLI PROFİL FOTOĞRAFI SEÇİMİ ---
+            string ad = item.AdSoyad.ToLower();
+            string uzmanlik = item.UzmanlikAlani.ToLower();
+            string imgUrl = "";
+
+            // 1. Adım: Cinsiyet Tahmini (Basit bir liste kontrolü)
+            // Bu listeye eklemeler yapabilirsin
+            string[] kadinIsimleri = { "ayşe", "fatma", "zeynep", "elif", "merve", "gamze", "seda", "kübra", "buse", "hande", "esra", "çiğdem", "ebru", "deniz", "gizem" };
+            
+            // Yoga/Pilates genellikle kadın eğitmenlerle özdeşleştiği için öncelik veriyoruz (Demo amaçlı)
+            bool isFemale = kadinIsimleri.Any(x => ad.Contains(x)) || uzmanlik.Contains("yoga") || uzmanlik.Contains("pilates") || uzmanlik.Contains("zumba");
+
+            if (isFemale)
+            {
+                // Kadın Eğitmen Görselleri
+                if (uzmanlik.Contains("yoga") || uzmanlik.Contains("pilates")) {
+                    imgUrl = "https://images.unsplash.com/photo-1609643034861-669528e93708?q=80&w=1470&auto=format&fit=crop"; // Fit Yoga
+                } else if (uzmanlik.Contains("boks") || uzmanlik.Contains("kick")) {
+                     imgUrl = "https://images.unsplash.com/photo-1591117207239-788bf8de6c3b?q=80&w=1470&auto=format&fit=crop"; // Kadın Boksör
+                } else {
+                    imgUrl = "https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=1374&auto=format&fit=crop"; // Genel Fit
+                }
+            }
+            else
+            {
+                // Erkek Eğitmen Görselleri
+                if (uzmanlik.Contains("boks") || uzmanlik.Contains("kick") || uzmanlik.Contains("dövüş")) {
+                    imgUrl = "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=1374&auto=format&fit=crop"; // Boksör/Sert
+                } else if (uzmanlik.Contains("body") || uzmanlik.Contains("vücut")) {
+                    imgUrl = "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1374&auto=format&fit=crop"; // Kaslı
+                } else {
+                    imgUrl = "https://images.unsplash.com/photo-1567013127542-490d757e51fc?q=80&w=1374&auto=format&fit=crop"; // Genel Hoca
+                }
+            }
+            // ----------------------------------------
+
+            <div class="col-md-4">
+                <div class="trainer-card">
+                    <div class="trainer-img-wrapper">
+                        <img src="@imgUrl" class="trainer-img" alt="@item.AdSoyad">
                         
-                        <h6 class="text-primary fw-bold">@item.UzmanlikAlani</h6>
-                        <hr />
-                        <p class="card-text text-muted">
-                            <small>🕒 @item.CalismaBaslangicSaati - @item.CalismaBitisSaati</small>
-                        </p>
+                        <div style="position: absolute; top: 15px; right: 15px; background: #ff5722; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.8rem;">
+                            @item.UzmanlikAlani
+                        </div>
                     </div>
-                    <div class="card-footer bg-white border-top-0 d-flex justify-content-between">
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm">Düzenle</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">Sil</a>
-                        }
+
+                    <div class="card-body text-center p-4">
+                        <h4 class="fw-bold mb-1">@item.AdSoyad</h4>
+                        <p class="text-muted small">Profesyonel Eğitmen</p>
                         
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm">Detay</a>
+                        <div class="d-flex justify-content-center mb-3">
+                            <span class="badge bg-light text-dark border me-2">🕒 @item.CalismaBaslangicSaati - @item.CalismaBitisSaati</span>
+                        </div>
+
+                        <div class="mb-4">
+                            <a href="#" class="social-btn bg-primary"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-btn" style="background: #E1306C"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-btn bg-info"><i class="fab fa-twitter"></i></a>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                             <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-dark rounded-pill">Özel Ders Al</a>
+                             
+                             @if (User.IsInRole("Admin"))
+                             {
+                                 <div class="btn-group">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Düzenle</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Sil</a>
+                                 </div>
+                             }
+                        </div>
                     </div>
                 </div>
             </div>

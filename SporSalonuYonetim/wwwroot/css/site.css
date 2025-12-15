@@ -127,3 +127,124 @@ body {
     color: #ffffff !important; /* Her durumda net beyaz görünsün */
     opacity: 1 !important; /* Saydamlığı kaldır */
 }
+/* --- Fiyatlandırma Bölümü (Pricing) --- */
+
+.pricing-section {
+    padding: 80px 0;
+    background-color: #fff;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title h2 {
+    font-weight: 800;
+    font-size: 2.5rem;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.section-title span {
+    color: #ff5722; /* Ana renk (Turuncu) */
+}
+
+.pricing-card {
+    border: none;
+    border-radius: 15px;
+    transition: all 0.3s;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    background: #fff;
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+}
+
+.pricing-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* Orta Kartı (Popüler) Öne Çıkarma */
+.pricing-card.popular {
+    border: 2px solid #ff5722;
+    transform: scale(1.05); /* Diğerlerinden biraz daha büyük */
+    z-index: 2;
+}
+.pricing-card.popular:hover {
+    transform: scale(1.05) translateY(-15px);
+}
+
+.pricing-header {
+    background-color: #333;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.pricing-card.popular .pricing-header {
+    background-color: #ff5722; /* Popüler olan turuncu olsun */
+}
+
+.price-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.price-period {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.pricing-body {
+    padding: 30px;
+    text-align: center;
+}
+
+.pricing-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.pricing-list li {
+    margin-bottom: 15px;
+    color: #666;
+}
+
+/* Liste maddelerinin başındaki tik işareti */
+.pricing-list li::before {
+    content: '✓';
+    color: #ff5722;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.btn-price {
+    border: 2px solid #333;
+    color: #333;
+    background: transparent;
+    border-radius: 30px;
+    padding: 10px 30px;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-price:hover {
+    background: #333;
+    color: white;
+}
+
+.pricing-card.popular .btn-price {
+    border-color: #ff5722;
+    color: #ff5722;
+}
+
+.pricing-card.popular .btn-price:hover {
+    background: #ff5722;
+    color: white;
+}

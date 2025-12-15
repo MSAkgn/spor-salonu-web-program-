@@ -4,64 +4,121 @@
     ViewData["Title"] = "Hizmetlerimiz";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>🧘 Hizmetlerimiz</h1>
+<style>
+    .service-box {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+        height: 100%;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: 0.3s;
+        background: #fff;
+    }
+    .service-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    .service-img {
+        height: 220px; /* Görseli biraz daha yükselttim */
+        width: 100%;
+        object-fit: cover;
+    }
+    .service-price-tag {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #ff5722;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 30px;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(255, 87, 34, 0.4);
+    }
+    .service-content {
+        padding: 25px;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Hizmetlerimiz & <span style="color: #ff5722;">Paketler</span></h1>
+        <p class="lead text-muted">Hedefinize en uygun programı seçin.</p>
         
         @if (User.IsInRole("Admin"))
         {
-            <a asp-action="Create" class="btn btn-success btn-lg">+ Yeni Hizmet Ekle</a>
+            <a asp-action="Create" class="btn btn-success btn-lg shadow mt-3">+ Yeni Hizmet Ekle</a>
         }
     </div>
 
-    <div class="card shadow">
-        <div class="card-body p-0">
-            <table class="table table-hover table-striped mb-0">
-                <thead class="bg-dark text-white">
-                    <tr>
-                        <th class="py-3 ps-4">Hizmet Adı</th>
-                        <th class="py-3">Açıklama</th>
-                        <th class="py-3 text-center">Süre (Dk)</th>
-                        <th class="py-3 text-end pe-4">Ücret</th>
-                        <th class="py-3 text-center">İşlemler</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="ps-4 fw-bold align-middle">@item.Ad</td>
-                            <td class="align-middle">@item.Aciklama</td>
-                            <td class="text-center align-middle">
-                                <span class="badge bg-info text-dark">@item.SureDakika dk</span>
-                            </td>
-                            <td class="text-end pe-4 align-middle fs-5 text-success">
-                                ₺@item.Ucret
-                            </td>
-                            <td class="text-center align-middle">
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <div class="btn-group" role="group">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Düzenle</a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Sil</a>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <span class="text-muted small">Yetki Yok</span>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            
-            @if (!Model.Any())
-            {
-                <div class="text-center py-5 text-muted">
-                    <h4>Henüz bir hizmet eklenmemiş.</h4>
-                </div>
-            }
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <div class="alert alert-warning d-inline-block px-5">
+                Henüz bir hizmet paketi bulunmuyor.
+            </div>
         </div>
+    }
+
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            // --- GÖRSEL SEÇİM MANTIĞI ---
+            // Varsayılan (Genel Gym)
+            string imgUrl = "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop"; 
+
+            string name = item.Ad.ToLower();
+            string desc = item.Aciklama?.ToLower() ?? ""; // Açıklamaya da bakalım
+
+            if (name.Contains("yoga") || name.Contains("pilates") || name.Contains("esneklik")) {
+                imgUrl = "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1470&auto=format&fit=crop";
+            }
+            else if (name.Contains("havuz") || name.Contains("yüzme") || name.Contains("swim")) {
+                imgUrl = "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=1470&auto=format&fit=crop";
+            }
+            // Kick Boks / Boks için özel dövüş görseli
+            else if (name.Contains("boks") || name.Contains("box") || name.Contains("kick") || name.Contains("dövüş")) {
+                imgUrl = "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=1469&auto=format&fit=crop";
+            }
+            else if (name.Contains("pt") || name.Contains("özel") || name.Contains("birebir")) {
+                imgUrl = "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1470&auto=format&fit=crop";
+            }
+            else if (name.Contains("zumba") || name.Contains("dans") || name.Contains("kardiyo")) {
+                imgUrl = "https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?q=80&w=1470&auto=format&fit=crop";
+            }
+            else if (name.Contains("crossfit") || desc.Contains("ağır")) {
+                imgUrl = "https://images.unsplash.com/photo-1517963879466-cd88b8d211cc?q=80&w=1470&auto=format&fit=crop";
+            }
+            // -----------------------------------
+
+            <div class="col-md-4">
+                <div class="service-box">
+                    <img src="@imgUrl" class="service-img" alt="@item.Ad">
+                    
+                    <div class="service-price-tag">
+                        ₺@item.Ucret <small style="font-size: 0.7em; opacity: 0.9">/ @item.SureDakika dk</small>
+                    </div>
+
+                    <div class="service-content">
+                        <h4 class="fw-bold">@item.Ad</h4>
+                        <hr style="width: 50px; border: 2px solid #ff5722; opacity: 1;">
+                        <p class="text-muted">
+                            @item.Aciklama
+                        </p>
+                        
+                        <div class="d-grid mt-4">
+                             <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-dark">Detaylı Bilgi Al</a>
+                        </div>
+                        
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="mt-3 text-center border-top pt-3">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="text-warning text-decoration-none me-3"><i class="fa fa-edit"></i> Düzenle</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger text-decoration-none"><i class="fa fa-trash"></i> Sil</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>

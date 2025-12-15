@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SporSalonuYonetim")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+06873a28f0f4b0974563bc7737ea7d8aebcdfa71")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e01db8f51c9a418469807d77c6e7b340abe080cd")]
 [assembly: System.Reflection.AssemblyProductAttribute("SporSalonuYonetim")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SporSalonuYonetim")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

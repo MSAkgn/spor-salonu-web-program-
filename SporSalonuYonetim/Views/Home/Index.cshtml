@@ -16,7 +16,7 @@
     </div>
 </div>
 
-<div class="container mb-5">
+<div class="container mb-5" style="margin-top: -50px; position: relative; z-index: 2;">
     <div class="row g-4">
         
         <div class="col-md-4">
@@ -45,6 +45,101 @@
 
     </div>
 </div>
+
+<section class="pricing-section">
+    <div class="container">
+        
+        <div class="section-title">
+            <h2>Size Uygun <span style="color: #ff5722;">Planı Seçin</span></h2>
+            <p class="text-muted">Hedeflerinize ve bütçenize en uygun paketi seçerek değişime başlayın.</p>
+        </div>
+
+        <div class="row align-items-center">
+            
+            <div class="col-md-4 mb-4">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h4>BAŞLANGIÇ</h4>
+                        <div class="price-value">₺750</div>
+                        <span class="price-period">/ Aylık</span>
+                    </div>
+                    <div class="pricing-body">
+                        <div class="mb-3 text-muted">
+                            <i class="fa fa-user-circle"></i> Eğitmen: <strong>Genel Salon Hocaları</strong>
+                        </div>
+                        <div class="mb-3 text-muted">
+                            <i class="fa fa-dumbbell"></i> Hizmet: <strong>Fitness & Kardiyo</strong>
+                        </div>
+                        <hr>
+                        <ul class="pricing-list">
+                            <li>Sınırsız Salon Kullanımı</li>
+                            <li>Temel Antrenman Programı</li>
+                            <li>Duş ve Dolap</li>
+                            <li style="text-decoration: line-through; opacity: 0.5;">Özel İlgi</li>
+                        </ul>
+                        <a asp-controller="Account" asp-action="Register" class="btn-price">Paketi Seç</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="pricing-card popular">
+                    <div style="background: #333; color: #fff; text-align: center; padding: 5px; font-size: 0.8rem;">
+                        EN ÇOK TERCİH EDİLEN
+                    </div>
+                    <div class="pricing-header">
+                        <h4>PRO GOLD</h4>
+                        <div class="price-value">₺1250</div>
+                        <span class="price-period">/ Aylık</span>
+                    </div>
+                    <div class="pricing-body">
+                        <div class="mb-3" style="color: #ff5722;">
+                            <i class="fa fa-star"></i> Baş Antrenör: <strong>Ahmet Yılmaz</strong>
+                        </div>
+                        <div class="mb-3 text-muted">
+                            <i class="fa fa-fire"></i> Hizmet: <strong>AI Koçluk + Grup Dersleri</strong>
+                        </div>
+                        <hr>
+                        <ul class="pricing-list">
+                            <li><b>Kişisel AI Koç Desteği</b></li>
+                            <li>Tüm Grup Dersleri (Spinning, Zumba)</li>
+                            <li>Ayda 1 Detaylı Vücut Analizi</li>
+                            <li>Özel Program Yazılımı</li>
+                        </ul>
+                        <a asp-controller="Uyelik" asp-action="SatinAl" asp-route-id="2" class="btn-price">Hemen Başla</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h4>VIP ELITE</h4>
+                        <div class="price-value">₺2000</div>
+                        <span class="price-period">/ Aylık</span>
+                    </div>
+                    <div class="pricing-body">
+                        <div class="mb-3 text-dark">
+                            <i class="fa fa-crown"></i> Özel Hoca (PT): <strong>Ayşe Demir</strong>
+                        </div>
+                        <div class="mb-3 text-muted">
+                            <i class="fa fa-heartbeat"></i> Hizmet: <strong>Birebir PT + Beslenme</strong>
+                        </div>
+                        <hr>
+                        <ul class="pricing-list">
+                            <li><b>Haftada 2 Saat Birebir Ders</b></li>
+                            <li>Diyetisyen Destekli Beslenme</li>
+                            <li>VIP Soyunma Odası & Havlu</li>
+                            <li>Sınırsız Misafir Hakkı</li>
+                        </ul>
+                        <a asp-controller="Home" asp-action="Contact" class="btn-price">İletişime Geç</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
 <div class="container-fluid py-5" style="background-color: #333; color: white;">
     <div class="container">
