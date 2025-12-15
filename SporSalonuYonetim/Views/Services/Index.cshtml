@@ -106,7 +106,7 @@
                         </p>
                         
                         <div class="d-grid mt-4">
-                             <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-dark">Detaylı Bilgi Al</a>
+                             <a asp-controller="Appointments" asp-action="Create" asp-route-serviceId="@item.Id" class="btn btn-outline-dark">Randevu Al</a>
                         </div>
                         
                         @if (User.IsInRole("Admin"))

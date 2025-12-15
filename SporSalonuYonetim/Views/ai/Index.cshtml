@@ -4,96 +4,238 @@
     ViewData["Title"] = "AI Antrenör Analizi";
 }
 
-<div class="container mt-5 mb-5">
+<style>
+    .ai-card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+        background: #fff;
+        transition: transform 0.3s;
+    }
+    .ai-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 40px;
+        color: white;
+        text-align: center;
+        position: relative;
+    }
+    .ai-icon-wrapper {
+        width: 80px;
+        height: 80px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        backdrop-filter: blur(5px);
+        font-size: 35px;
+    }
+    .form-control-lg {
+        border-radius: 12px;
+        padding: 15px;
+        border: 2px solid #eee;
+        font-size: 1rem;
+    }
+    .form-control-lg:focus {
+        border-color: #764ba2;
+        box-shadow: 0 0 0 0.2rem rgba(118, 75, 162, 0.15);
+    }
+    .file-upload-wrapper {
+        position: relative;
+        height: 150px;
+        border: 2px dashed #ccc;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: 0.3s;
+        overflow: hidden;
+    }
+    .file-upload-wrapper:hover {
+        background: #fff;
+        border-color: #764ba2;
+    }
+    .file-upload-input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 2;
+    }
+    .file-upload-text {
+        text-align: center;
+        color: #777;
+        pointer-events: none;
+    }
+    
+    /* Sonuç Alanı */
+    .result-section {
+        background: #f8f9fa;
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid #eee;
+    }
+    .uploaded-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 15px;
+        border: 4px solid white;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .analysis-text {
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: #444;
+    }
+    
+    /* Loading Animasyonu */
+    .spinner-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(255,255,255,0.9);
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 20px;
+    }
+</style>
+
+<div class="container py-5">
     <div class="row justify-content-center">
-        
-        <div class="col-md-5 mb-4">
-            <div class="card shadow-lg border-0">
-                <div class="card-header bg-gradient bg-primary text-white text-center py-4">
-                    <h3 class="mb-0"><i class="fas fa-robot"></i> AI Antrenör</h3>
-                    <small>İster Boy/Kilo Gir, İster Fotoğraf Yükle</small>
+        <div class="col-lg-8">
+            
+            <div class="ai-card position-relative">
+                
+                <div id="loadingSpinner" class="spinner-overlay d-none">
+                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+                    <h5 class="mt-3 fw-bold text-dark">Yapay Zeka Analiz Ediyor...</h5>
+                    <p class="text-muted small">Bu işlem fotoğrafa bağlı olarak 5-10 saniye sürebilir.</p>
                 </div>
-                <div class="card-body p-4">
-                    <div id="loadingSpinner" class="text-center d-none py-5">
-                        <div class="spinner-border text-primary" role="status"></div>
-                        <h5 class="mt-3 text-muted">Analiz Yapılıyor...</h5>
+
+                <div class="ai-header">
+                    <div class="ai-icon-wrapper">
+                        <i class="fas fa-brain"></i>
                     </div>
+                    <h2 class="fw-bold mb-1">AI Vücut Analizi</h2>
+                    <p class="mb-0 text-white-50">Ölçülerini gir veya fotoğrafını yükle, sana özel programı oluşturalım.</p>
+                </div>
 
-                    <form id="aiForm" asp-action="Index" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-                        
-                        <div class="alert alert-secondary border-0 shadow-sm small">
-                            <i class="fas fa-lightbulb text-warning"></i> 
-                            İsterseniz sadece boy/kilo girin, isterseniz sadece fotoğraf yükleyin. En iyi sonuç için ikisini de kullanabilirsiniz.
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label class="form-label fw-bold">Boy (cm)</label>
-                                <input asp-for="Boy" class="form-control" placeholder="Örn: 180" type="number" />
+                <div class="card-body p-4 p-md-5">
+                    
+                    @if (Model.Oneri == null)
+                    {
+                        <form id="aiForm" asp-action="Index" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                            
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-muted ps-2">Boyunuz (cm)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-ruler-vertical text-primary"></i></span>
+                                        <input asp-for="Boy" class="form-control form-control-lg border-start-0 ps-0" placeholder="Örn: 180" type="number" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-muted ps-2">Kilonuz (kg)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-weight text-primary"></i></span>
+                                        <input asp-for="Kilo" class="form-control form-control-lg border-start-0 ps-0" placeholder="Örn: 75" type="number" />
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col">
-                                <label class="form-label fw-bold">Kilo (kg)</label>
-                                <input asp-for="Kilo" class="form-control" placeholder="Örn: 75" type="number" />
+
+                            <div class="mb-5">
+                                <label class="form-label fw-bold text-muted ps-2">Vücut Fotoğrafı (İsteğe Bağlı)</label>
+                                <div class="file-upload-wrapper" id="dropZone">
+                                    <input asp-for="Foto" type="file" class="file-upload-input" accept="image/*" onchange="previewFile(this)" />
+                                    <div class="file-upload-text">
+                                        <i class="fas fa-cloud-upload-alt fa-2x mb-2 text-primary"></i><br>
+                                        <span id="fileLabel">Fotoğrafı sürükleyin veya seçmek için tıklayın</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-dark btn-lg py-3 rounded-pill shadow fw-bold">
+                                    <i class="fas fa-rocket me-2"></i> Analizi Başlat
+                                </button>
+                            </div>
+                            
+                            <div class="text-center mt-3">
+                                <small class="text-muted"><i class="fas fa-info-circle"></i> Verileriniz analiz sonrası otomatik silinir.</small>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="text-center mb-4">
+                            @if (!string.IsNullOrEmpty(Model.FotoDataUrl))
+                            {
+                                <div class="d-inline-block position-relative">
+                                    <img src="@Model.FotoDataUrl" class="uploaded-img mb-3" />
+                                    <span class="badge bg-success position-absolute top-0 end-0 rounded-pill">Analiz Edildi</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="ai-icon-wrapper text-primary bg-light shadow-sm" style="width: 60px; height: 60px; font-size: 25px;">
+                                    <i class="fas fa-clipboard-check"></i>
+                                </div>
+                            }
+                            <h4 class="fw-bold mt-2">Analiz Raporunuz Hazır!</h4>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="analysis-text">
+                                @Html.Raw(Model.Oneri)
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Vücut Fotoğrafı (İsteğe Bağlı)</label>
-                            <input asp-for="Foto" type="file" class="form-control" accept="image/*" />
+                        <div class="d-grid mt-4">
+                            <a href="/Ai" class="btn btn-outline-primary btn-lg rounded-pill">
+                                <i class="fas fa-redo-alt me-2"></i> Yeni Analiz Yap
+                            </a>
                         </div>
+                    }
 
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm">
-                                🚀 Analizi Başlat
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
+
         </div>
-
-        @if (Model.Oneri != null)
-        {
-            <div class="col-md-7">
-                <div class="card shadow border-0 h-100">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">Analiz Sonucu</h5>
-                    </div>
-                    <div class="card-body">
-                        @if (!string.IsNullOrEmpty(Model.FotoDataUrl))
-                        {
-                            <div class="text-center mb-3">
-                                <img src="@Model.FotoDataUrl" class="img-fluid rounded shadow-sm" style="max-height: 200px;" />
-                            </div>
-                        }
-
-                        <div class="p-3 bg-light rounded border">
-                            @Html.Raw(Model.Oneri)
-                        </div>
-                        
-                        <div class="mt-3 text-end">
-                            <a href="/Ai" class="btn btn-outline-secondary btn-sm">Yeni Analiz</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
     </div>
 </div>
 
 <script>
-    // Form gönderilmeden önce en az birinin dolu olduğunu kontrol et
+    // Dosya seçilince ismi göster
+    function previewFile(input) {
+        var label = document.getElementById('fileLabel');
+        var dropZone = document.getElementById('dropZone');
+        if (input.files && input.files[0]) {
+            label.innerHTML = "<strong>Seçilen Dosya:</strong> " + input.files[0].name;
+            dropZone.style.borderColor = "#28a745";
+            dropZone.style.backgroundColor = "#f0fff4";
+        }
+    }
+
+    // Form validasyon ve loading
     function validateForm() {
         var boy = document.querySelector('input[name="Boy"]').value;
         var kilo = document.querySelector('input[name="Kilo"]').value;
         var foto = document.querySelector('input[name="Foto"]').files.length;
 
         if ((boy == "" || kilo == "") && foto == 0) {
-            alert("Lütfen ya Boy/Kilo girin ya da bir Fotoğraf yükleyin!");
+            alert("Lütfen en azından Boy/Kilo bilgisi girin veya bir fotoğraf yükleyin!");
             return false;
         }
 
-        document.getElementById("aiForm").classList.add("d-none");
+        // Loading ekranını aç
         document.getElementById("loadingSpinner").classList.remove("d-none");
         return true;
     }

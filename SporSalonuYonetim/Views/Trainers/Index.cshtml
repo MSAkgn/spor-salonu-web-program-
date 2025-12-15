@@ -27,7 +27,7 @@
         height: 100%;
         object-fit: cover;
         transition: transform 0.5s;
-        object-position: top center; /* Yüzler genelde yukarıda olur */
+        object-position: top center;
     }
     .trainer-card:hover .trainer-img {
         transform: scale(1.1);
@@ -45,13 +45,26 @@
         transition: 0.3s;
     }
     .social-btn:hover { opacity: 0.8; color: white; }
+    
+    .branch-badge {
+        position: absolute; 
+        top: 15px; 
+        right: 15px; 
+        background: rgba(255, 87, 34, 0.9); 
+        color: white; 
+        padding: 5px 15px; 
+        border-radius: 20px; 
+        font-weight: bold; 
+        font-size: 0.8rem;
+        backdrop-filter: blur(5px);
+    }
 </style>
 
 <div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-5">
         <div>
             <h1 class="display-5 fw-bold">Eğitmenlerimiz</h1>
-            <p class="text-muted">Alanında uzman kadromuzla tanışın.</p>
+            <p class="text-muted">Hedeflerinize ulaşmanız için uzman kadromuz.</p>
         </div>
         
         @if (User.IsInRole("Admin"))
@@ -64,45 +77,34 @@
     {
         <div class="alert alert-info text-center py-5">
             <h4>Henüz kayıtlı eğitmen yok.</h4>
+            <p>Admin panelinden ekleme yapabilirsiniz.</p>
         </div>
     }
 
     <div class="row g-4">
         @foreach (var item in Model)
         {
-            // --- AKILLI PROFİL FOTOĞRAFI SEÇİMİ ---
+            // --- GÖRSEL MANTIĞI AYNI KALIYOR ---
             string ad = item.AdSoyad.ToLower();
-            string uzmanlik = item.UzmanlikAlani.ToLower();
+            string brans = item.UzmanlikAlani.ToLower();
             string imgUrl = "";
+            string[] kadinIsimleri = { "ayşe", "fatma", "zeynep", "elif", "merve", "gamze", "seda", "kübra", "buse", "hande", "esra", "çiğdem", "ebru", "deniz", "gizem", "hatice", "beyza", "sinem", "irem", "selin", "pelin", "gül", "nur" };
+            bool isWoman = kadinIsimleri.Any(x => ad.Contains(x));
 
-            // 1. Adım: Cinsiyet Tahmini (Basit bir liste kontrolü)
-            // Bu listeye eklemeler yapabilirsin
-            string[] kadinIsimleri = { "ayşe", "fatma", "zeynep", "elif", "merve", "gamze", "seda", "kübra", "buse", "hande", "esra", "çiğdem", "ebru", "deniz", "gizem" };
-            
-            // Yoga/Pilates genellikle kadın eğitmenlerle özdeşleştiği için öncelik veriyoruz (Demo amaçlı)
-            bool isFemale = kadinIsimleri.Any(x => ad.Contains(x)) || uzmanlik.Contains("yoga") || uzmanlik.Contains("pilates") || uzmanlik.Contains("zumba");
-
-            if (isFemale)
-            {
-                // Kadın Eğitmen Görselleri
-                if (uzmanlik.Contains("yoga") || uzmanlik.Contains("pilates")) {
-                    imgUrl = "https://images.unsplash.com/photo-1609643034861-669528e93708?q=80&w=1470&auto=format&fit=crop"; // Fit Yoga
-                } else if (uzmanlik.Contains("boks") || uzmanlik.Contains("kick")) {
-                     imgUrl = "https://images.unsplash.com/photo-1591117207239-788bf8de6c3b?q=80&w=1470&auto=format&fit=crop"; // Kadın Boksör
-                } else {
-                    imgUrl = "https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=1374&auto=format&fit=crop"; // Genel Fit
-                }
-            }
-            else
-            {
-                // Erkek Eğitmen Görselleri
-                if (uzmanlik.Contains("boks") || uzmanlik.Contains("kick") || uzmanlik.Contains("dövüş")) {
-                    imgUrl = "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=1374&auto=format&fit=crop"; // Boksör/Sert
-                } else if (uzmanlik.Contains("body") || uzmanlik.Contains("vücut")) {
-                    imgUrl = "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1374&auto=format&fit=crop"; // Kaslı
-                } else {
-                    imgUrl = "https://images.unsplash.com/photo-1567013127542-490d757e51fc?q=80&w=1374&auto=format&fit=crop"; // Genel Hoca
-                }
+            if (brans.Contains("yoga") || brans.Contains("pilates") || brans.Contains("esneklik")) {
+                imgUrl = isWoman ? "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1470&auto=format&fit=crop" : "https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=1374&auto=format&fit=crop";
+            } else if (brans.Contains("boks") || brans.Contains("kick") || brans.Contains("muay") || brans.Contains("dövüş")) {
+                imgUrl = isWoman ? "https://images.unsplash.com/photo-1591117207239-788bf8de6c3b?q=80&w=1470&auto=format&fit=crop" : "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=1374&auto=format&fit=crop";
+            } else if (brans.Contains("yüzme") || brans.Contains("havuz") || brans.Contains("swim")) {
+                imgUrl = isWoman ? "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=1470&auto=format&fit=crop" : "https://images.unsplash.com/photo-1530549387789-4c1017266635?q=80&w=1470&auto=format&fit=crop";
+            } else if (brans.Contains("crossfit") || brans.Contains("ağır")) {
+                imgUrl = isWoman ? "https://images.unsplash.com/photo-1594381898411-846e7d193883?q=80&w=1374&auto=format&fit=crop" : "https://images.unsplash.com/photo-1517963879466-cd88b8d211cc?q=80&w=1470&auto=format&fit=crop";
+            } else if (brans.Contains("zumba") || brans.Contains("dans")) {
+                imgUrl = "https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?q=80&w=1470&auto=format&fit=crop";
+            } else if (brans.Contains("spinning") || brans.Contains("bisiklet")) {
+                 imgUrl = "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop";
+            } else {
+                imgUrl = isWoman ? "https://images.unsplash.com/photo-1611672585731-fa10603fb9e0?q=80&w=1374&auto=format&fit=crop" : "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1470&auto=format&fit=crop";
             }
             // ----------------------------------------
 
@@ -110,10 +112,7 @@
                 <div class="trainer-card">
                     <div class="trainer-img-wrapper">
                         <img src="@imgUrl" class="trainer-img" alt="@item.AdSoyad">
-                        
-                        <div style="position: absolute; top: 15px; right: 15px; background: #ff5722; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.8rem;">
-                            @item.UzmanlikAlani
-                        </div>
+                        <div class="branch-badge">@item.UzmanlikAlani</div>
                     </div>
 
                     <div class="card-body text-center p-4">
@@ -131,7 +130,7 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                             <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-dark rounded-pill">Özel Ders Al</a>
+                            <a asp-controller="Appointments" asp-action="Create" asp-route-trainerId="@item.Id" class="btn btn-outline-dark rounded-pill">Özel Ders Al</a>
                              
                              @if (User.IsInRole("Admin"))
                              {

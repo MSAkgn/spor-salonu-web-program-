@@ -1,44 +1,187 @@
 @model SporSalonuYonetim.Models.Appointment
 
 @{
-    ViewData["Title"] = "Randevu Al";
+    ViewData["Title"] = "Randevu Oluştur";
+    
+    // Controller'dan gelen verileri güvenli şekilde alıyoruz
+    var trainers = ViewBag.Trainers as List<SporSalonuYonetim.Models.Trainer>;
+    var selectedTrainerId = ViewBag.SelectedTrainerId as int?;
+    
+    // ViewData casting hatasını önlemek için kontrol
+    var serviceList = ViewData["ServiceId"] as SelectList;
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow">
-            <div class="card-header bg-warning text-dark">
-                <h4 class="mb-0">📅 Yeni Randevu Oluştur</h4>
-            </div>
-            <div class="card-body">
-                <form asp-action="Create">
-                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+<style>
+    .appointment-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    .appointment-header {
+        background: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 100%);
+        padding: 40px;
+        color: white;
+        text-align: center;
+    }
+    .form-label {
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 10px;
+    }
+    .form-control, .form-select {
+        border-radius: 12px;
+        padding: 12px 15px;
+        border: 2px solid #eee;
+        transition: 0.3s;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #ff5722;
+        box-shadow: 0 0 0 0.2rem rgba(255, 87, 34, 0.15);
+    }
+    
+    input[type="datetime-local"] {
+        position: relative;
+        cursor: pointer;
+    }
+    .date-icon {
+        position: absolute;
+        right: 15px;
+        top: 45px;
+        pointer-events: none;
+        color: #ff5722;
+    }
+</style>
 
-                    <div class="form-group mb-3">
-                        <label class="control-label fw-bold">Antrenör Seçiniz</label>
-                        <select asp-for="TrainerId" class="form-control" asp-items="ViewBag.TrainerId"></select>
-                    </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="appointment-card">
+                <div class="appointment-header">
+                    <h2 class="fw-bold mb-2">📅 Randevu Planla</h2>
+                    <p class="text-white-50 mb-0">Antrenörünü ve saatini seç, spora başla.</p>
+                </div>
+                
+                <div class="p-5">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                    <div class="form-group mb-3">
-                        <label class="control-label fw-bold">Hizmet Seçiniz</label>
-                        <select asp-for="ServiceId" class="form-control" asp-items="ViewBag.ServiceId"></select>
-                    </div>
+                        <div class="mb-4">
+                            <label asp-for="TrainerId" class="form-label">Eğitmen Seçiniz</label>
+                            <select asp-for="TrainerId" class="form-select" id="TrainerSelect">
+                                <option value="" data-uzmanlik="">-- Önce Eğitmen Seçin --</option>
+                                @if (trainers != null)
+                                {
+                                    foreach (var trainer in trainers)
+                                    {
+                                        <option value="@trainer.Id" 
+                                                data-uzmanlik="@trainer.UzmanlikAlani" 
+                                                selected="@(selectedTrainerId == trainer.Id ? "selected" : null)">
+                                            @trainer.AdSoyad (@trainer.UzmanlikAlani)
+                                        </option>
+                                    }
+                                }
+                            </select>
+                            <div class="form-text text-muted">
+                                <i class="fas fa-info-circle"></i> Seçtiğiniz eğitmene göre uygun dersler listelenecektir.
+                            </div>
+                        </div>
 
-                    <div class="form-group mb-3">
-                        <label asp-for="TarihSaat" class="control-label fw-bold">Tarih ve Saat</label>
-                        <input asp-for="TarihSaat" class="form-control" type="datetime-local" 
-                               min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
-                    </div>
+                        <div class="mb-4">
+                            <label asp-for="ServiceId" class="form-label">Almak İstediğiniz Hizmet</label>
+                            <select asp-for="ServiceId" class="form-select" id="ServiceSelect">
+                                <option value="">-- Ders Seçiniz --</option>
+                                @if (serviceList != null)
+                                {
+                                    foreach (var service in serviceList)
+                                    {
+                                        <option value="@service.Value" selected="@(service.Selected)">@service.Text</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="ServiceId" class="text-danger"></span>
+                        </div>
 
-                    <div class="d-grid gap-2">
-                        <input type="submit" value="Randevuyu Onayla" class="btn btn-primary" />
-                        <a asp-action="Index" class="btn btn-outline-secondary">İptal</a>
-                    </div>
-                </form>
+                        <div class="mb-4 position-relative">
+                            <label asp-for="TarihSaat" class="form-label">Tarih ve Saat</label>
+                            <input asp-for="TarihSaat" class="form-control" type="datetime-local" 
+                                   value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" 
+                                   min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                            
+                            <i class="fas fa-calendar-alt date-icon fa-lg"></i>
+                            <span asp-validation-for="TarihSaat" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid mt-5">
+                            <button type="submit" class="btn btn-dark btn-lg py-3 rounded-pill shadow-sm">
+                                Randevuyu Onayla <i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var trainerSelect = document.getElementById("TrainerSelect");
+        var serviceSelect = document.getElementById("ServiceSelect");
+        
+        // Tüm hizmetleri yedekle
+        var allServices = Array.from(serviceSelect.options);
+
+        function filterServices() {
+            var selectedIndex = trainerSelect.selectedIndex;
+            if (selectedIndex < 0) return; // Seçim yoksa çık
+
+            var selectedOption = trainerSelect.options[selectedIndex];
+            var uzmanlik = selectedOption.getAttribute("data-uzmanlik");
+            
+            if (!uzmanlik) return;
+
+            uzmanlik = uzmanlik.toLowerCase();
+
+            // Listeyi temizle
+            serviceSelect.innerHTML = '<option value="">-- Ders Seçiniz --</option>';
+
+            var matchFound = false;
+
+            allServices.forEach(function(option) {
+                if (option.value === "") return;
+
+                var serviceName = option.text.toLowerCase();
+                
+                // Eşleştirme Mantığı
+                var isMatch = serviceName.includes(uzmanlik) || 
+                              (uzmanlik.includes("fitness") && (serviceName.includes("pt") || serviceName.includes("özel"))) ||
+                              (uzmanlik.includes("body") && serviceName.includes("pt"));
+
+                if (isMatch) {
+                    serviceSelect.add(option.cloneNode(true));
+                    matchFound = true;
+                }
+            });
+
+            // Eşleşme yoksa hepsini göster
+            if (!matchFound) {
+                allServices.forEach(function(option) {
+                   if (option.value !== "") serviceSelect.add(option.cloneNode(true));
+                });
+            } else {
+                // Varsa ilkini seç
+                serviceSelect.selectedIndex = 1; 
+            }
+        }
+
+        // Sayfa açılışında çalıştır (Linkten geldiyse)
+        filterServices();
+
+        // Değişiklikte çalıştır
+        trainerSelect.addEventListener("change", filterServices);
+    });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

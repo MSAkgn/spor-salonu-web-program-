@@ -25,10 +25,8 @@ namespace SporSalonuYonetim.Controllers
         // GET: Appointments
         public async Task<IActionResult> Index()
         {
-            // 1. KONTROL: Kullanıcı giriş yapmış mı?
             if (!User.Identity.IsAuthenticated)
             {
-                TempData["ErrorMessage"] = "Randevularınızı görebilmek için önce giriş yapmalısınız.";
                 return RedirectToPage("/Account/Login", new { area = "Identity" });
             }
 
@@ -49,24 +47,34 @@ namespace SporSalonuYonetim.Controllers
             return View(await randevular.OrderBy(a => a.TarihSaat).ToListAsync());
         }
 
-        [Authorize] 
-        public IActionResult Create()
+        // GET: Appointments/Create
+        [Authorize]
+        public IActionResult Create(int? trainerId, int? serviceId)
         {
-            ViewData["TrainerId"] = new SelectList(_context.Trainers, "Id", "AdSoyad");
-            ViewData["ServiceId"] = new SelectList(_context.Services, "Id", "Ad");
+            // Hizmetleri Dropdown için hazırlıyoruz
+            ViewData["ServiceId"] = new SelectList(_context.Services, "Id", "Ad", serviceId);
+
+            // Antrenörleri Dropdown için 'Liste' olarak çekiyoruz (View tarafında uzmanlık alanına erişmek için)
+            ViewBag.Trainers = _context.Trainers.ToList();
+
+            // Linkten gelen seçimleri View'a taşıyoruz
+            ViewBag.SelectedTrainerId = trainerId;
+            ViewBag.SelectedServiceId = serviceId;
+
             return View();
         }
 
         // POST: Appointments/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize] 
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,TrainerId,ServiceId,TarihSaat")] Appointment appointment)
         {
             // 1. Kullanıcı Atama
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login", "Account", new { area = "Identity" });
-            appointment.UserId = user.Id;
+            
+            appointment.UserId = user.Id; // Otomatik atama
 
             // 2. Geçmiş Tarih Kontrolü
             if (appointment.TarihSaat < DateTime.Now)
@@ -74,7 +82,7 @@ namespace SporSalonuYonetim.Controllers
                 ModelState.AddModelError("", "Geçmiş bir tarihe randevu alamazsınız.");
             }
 
-            // 3. ÇAKIŞMA KONTROLÜ (Başka randevu var mı?)
+            // 3. ÇAKIŞMA KONTROLÜ
             bool cakismaVarMi = _context.Appointments.Any(a => 
                 a.TrainerId == appointment.TrainerId && 
                 a.TarihSaat == appointment.TarihSaat);
@@ -84,25 +92,19 @@ namespace SporSalonuYonetim.Controllers
                 ModelState.AddModelError("", "Seçtiğiniz antrenör bu saatte dolu! Lütfen başka bir saat seçiniz.");
             }
 
-            // --- YENİ EKLENEN KISIM BAŞLANGIÇ ---
-            // 4. MESAİ SAATİ KONTROLÜ (Antrenör çalışıyor mu?)
-            // Seçilen antrenörü veritabanından çekip saatlerine bakıyoruz
+            // 4. MESAİ SAATİ KONTROLÜ
             var secilenAntrenor = await _context.Trainers.FindAsync(appointment.TrainerId);
             
             if (secilenAntrenor != null)
             {
-                // Randevunun saati (Sadece saat kısmı, tarih önemsiz)
                 TimeSpan randevuSaati = appointment.TarihSaat.TimeOfDay;
-
-                // Eğer randevu saati, başlangıçtan önceyse VEYA bitişten sonraysa hata ver
                 if (randevuSaati < secilenAntrenor.CalismaBaslangicSaati || randevuSaati >= secilenAntrenor.CalismaBitisSaati)
                 {
-                    ModelState.AddModelError("", $"Seçtiğiniz antrenör o saatte çalışmıyor. (Çalışma Saatleri: {secilenAntrenor.CalismaBaslangicSaati} - {secilenAntrenor.CalismaBitisSaati})");
+                    ModelState.AddModelError("", $"Seçtiğiniz antrenör o saatte çalışmıyor. ({secilenAntrenor.CalismaBaslangicSaati} - {secilenAntrenor.CalismaBitisSaati})");
                 }
             }
-            // --- YENİ EKLENEN KISIM BİTİŞ ---
 
-            // Validation temizliği
+            // Validation Temizliği
             ModelState.Remove("User");
             ModelState.Remove("UserId");
             ModelState.Remove("Trainer");
@@ -115,11 +117,16 @@ namespace SporSalonuYonetim.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["TrainerId"] = new SelectList(_context.Trainers, "Id", "AdSoyad", appointment.TrainerId);
+            // Hata varsa sayfayı tekrar doldur
             ViewData["ServiceId"] = new SelectList(_context.Services, "Id", "Ad", appointment.ServiceId);
+            ViewBag.Trainers = _context.Trainers.ToList(); // Burayı unutmamak önemli
+            ViewBag.SelectedTrainerId = appointment.TrainerId;
+            
             return View(appointment);
         }
 
+        // ... Diğer metodlar (Approve, Delete vs) aynı kalabilir ...
+        
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Approve(int id)
         {
@@ -136,14 +143,11 @@ namespace SporSalonuYonetim.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
-
             var appointment = await _context.Appointments
                 .Include(a => a.Trainer)
                 .Include(a => a.Service)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
             if (appointment == null) return NotFound();
-
             return View(appointment);
         }
 
@@ -153,10 +157,7 @@ namespace SporSalonuYonetim.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var appointment = await _context.Appointments.FindAsync(id);
-            if (appointment != null)
-            {
-                _context.Appointments.Remove(appointment);
-            }
+            if (appointment != null) _context.Appointments.Remove(appointment);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
