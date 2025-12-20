@@ -10,7 +10,7 @@ namespace SporSalonuYonetim.Controllers
     public class AiController : Controller
     {
         // 🔴 LİSTEYİ ALABİLDİĞİN O "ÇALIŞAN" API KEY'İ BURAYA YAPIŞTIR
-        private const string GeminiApiKey = "AIzaSyAVDyL0KhjGrShnwvBRwQ0Qg0XX1ZPQRPA"; 
+        private const string GeminiApiKey = "AIzaSyAisX_lIJ2CtCaoDvxD_f0y97mufFhsZwA"; 
         
         // ✨ HEDEF: Listedeki en yeni ve güçlü model: Gemini 2.5 Flash
         // Google senin hesabına bu sürümü tanımlamış.

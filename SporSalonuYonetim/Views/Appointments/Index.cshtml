@@ -32,40 +32,68 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach (var item in Model) {
-                    <tr>
-                        <td>
-                            <span class="fw-bold">@item.TarihSaat.ToString("dd MMMM yyyy")</span> <br/>
-                            <small class="text-muted">@item.TarihSaat.ToString("HH:mm")</small>
-                        </td>
-                        <td>@item.Trainer?.AdSoyad</td>
-                        <td>@item.Service?.Ad</td>
-                        
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <td>@item.User?.Email</td>
-                        }
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                <span class="fw-bold">@item.TarihSaat.ToString("dd MMMM yyyy")</span> <br/>
+                <small class="text-muted">@item.TarihSaat.ToString("HH:mm")</small>
+            </td>
+            <td>@item.Trainer?.AdSoyad</td>
+            <td>@item.Service?.Ad</td>
+            
+            @if (User.IsInRole("Admin"))
+            {
+                <td>@item.User?.Email</td>
+            }
 
-                        <td>
-                            @if (item.OnaylandiMi)
-                            {
-                                <span class="badge bg-success">Onaylandı</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-warning text-dark">Beklemede</span>
-                            }
-                        </td>
-                        <td>
-                            @if (User.IsInRole("Admin") && !item.OnaylandiMi)
-                            {
-                                <a asp-action="Approve" asp-route-id="@item.Id" class="btn btn-sm btn-success">✅ Onayla</a>
-                            }
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">🗑️ İptal</a>
-                        </td>
-                    </tr>
+            @* 1. DURUM (BADGE) MANTIĞI *@
+            <td>
+                @if (item.TarihSaat < DateTime.Now)
+                {
+                    @if (item.OnaylandiMi)
+                    {
+                        <span class="badge bg-secondary">Gerçekleşti</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">İptal Edildi</span>
+                    }
                 }
-                </tbody>
+                else
+                {
+                    @if (item.OnaylandiMi)
+                    {
+                        <span class="badge bg-success">Onaylandı</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Beklemede</span>
+                    }
+                }
+            </td>
+
+            @* 2. İŞLEMLER (BUTON) MANTIĞI *@
+            <td>
+                @if (item.TarihSaat > DateTime.Now)
+                {
+                    @* Sadece gelecek randevular için Admin Onay butonu *@
+                    @if (User.IsInRole("Admin") && !item.OnaylandiMi)
+                    {
+                        <a asp-action="Approve" asp-route-id="@item.Id" class="btn btn-sm btn-success me-1">✅ Onayla</a>
+                    }
+                    
+                    @* Gelecek olan randevuyu herkes (Üye/Admin) silebilir *@
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">🗑️ İptal</a>
+                }
+                else
+                {
+                    @* Tarihi geçmiş randevular için butonları gizle ve yazı göster *@
+                    <span class="text-muted small italic">Geçmiş Randevu</span>
+                }
+            </td>
+        </tr>
+    }
+</tbody>
             </table>
         </div>
     }
